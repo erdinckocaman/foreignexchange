@@ -3,11 +3,13 @@ package com.tamplan.sample.foreignexchange.domain;
 import com.tamplan.sample.foreignexchange.domain.entity.CurrencyConversionResult;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidAmountException;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidCurrencyException;
+import com.tamplan.sample.foreignexchange.domain.exception.InvalidUserInputException;
 import com.tamplan.sample.foreignexchange.domain.repository.CurrencyConversionRepository;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -67,11 +69,10 @@ public class ExchangeRatesService {
      */
     public CurrencyConversionResult convertAmount(BigDecimal amount, String baseCurrencyCode, String targetCurrencyCode) {
         validateAmount(amount);
-        var currencies =  validateCurrencyCodes(baseCurrencyCode, targetCurrencyCode);
 
+        var currencies =  validateCurrencyCodes(baseCurrencyCode, targetCurrencyCode);
         var baseCurrency = currencies.get(0);
         var targetCurrency = currencies.get(1);
-
         var txnId = RandomIdGenerator.generateRandomId();
 
         var conversionResult = new CurrencyConversionResult();
@@ -80,16 +81,27 @@ public class ExchangeRatesService {
         conversionResult.setTargetCurrency(targetCurrency.name());
         conversionResult.setAmount(amount);
         conversionResult.setConvertedAmount(exchangeRatesGateway.convertAmount(amount, baseCurrency, targetCurrency));
-
         currencyConversionRepository.saveCurrencyConversionResult(conversionResult);
 
-        return conversionResult;
+        return currencyConversionRepository.findByTransactionId(txnId).orElseThrow();
     }
-
 
     private void validateAmount(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidAmountException("amount cannot be null or less than or equal to zero");
         }
     }
+
+    public List<CurrencyConversionResult> getCurrencyConversions(LocalDate transactionDate, String transactionId, int page, int size) {
+        if (transactionDate == null && transactionId == null) {
+            throw new InvalidUserInputException("Either transaction date or transaction ID must be provided");
+        }
+
+        if (page <= 0 || size <= 0) {
+            throw new InvalidUserInputException("Page number and size must be greater than zero");
+        }
+
+        return currencyConversionRepository.getCurrencyConversionResults(transactionDate, transactionId, page, size);
+    }
+
 }

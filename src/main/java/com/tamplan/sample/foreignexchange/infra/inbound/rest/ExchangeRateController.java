@@ -6,12 +6,16 @@ import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConve
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.ExchangeRateResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -39,4 +43,17 @@ public class ExchangeRateController {
                 exchangeRateService.convertAmount(request.amount(), request.baseCurrency(), request.targetCurrency()));
     }
 
+    @GetMapping("/currency-conversion-history")
+    public List<CurrencyConversionResponse> getCurrencyConversions(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate transactionDate,
+            @RequestParam(required = false) String transactionId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        logger.info("Get currency conversions, transaction date: [{}], transactionId: [{}]", transactionDate, transactionId);
+        return exchangeRateService.getCurrencyConversions(transactionDate, transactionId, page, size)
+                .stream()
+                .map(CurrencyConversionResponse::of)
+                .toList();
+    }
 }

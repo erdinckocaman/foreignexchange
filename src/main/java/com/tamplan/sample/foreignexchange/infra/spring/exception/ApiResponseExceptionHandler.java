@@ -16,13 +16,14 @@ public class ApiResponseExceptionHandler extends ResponseEntityExceptionHandler 
     @ExceptionHandler(Exception.class)
     public ForeignExchangeResponseEntity handleSystemError(Exception exception, WebRequest request) {
         logger.error("System Error", exception);
-        return new ForeignExchangeResponseEntity(new UndefinedException(exception), HttpStatus.INTERNAL_SERVER_ERROR);
+        var undefinedException = new UndefinedException(exception);
+        return new ForeignExchangeResponseEntity(undefinedException, undefinedException.getHttpStatus());
     }
 
     @ExceptionHandler(ApplicationException.class)
     public ForeignExchangeResponseEntity handleApplicationError(ApplicationException exception, WebRequest request) {
         logger.error("Application Error", exception);
-        return new ForeignExchangeResponseEntity(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ForeignExchangeResponseEntity(exception, exception.getHttpStatus());
     }
 
 }

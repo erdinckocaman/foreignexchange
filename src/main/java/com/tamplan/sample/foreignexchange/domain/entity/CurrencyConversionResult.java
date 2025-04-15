@@ -3,6 +3,7 @@ package com.tamplan.sample.foreignexchange.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
@@ -12,19 +13,29 @@ import java.time.LocalDateTime;
 @Table(name = "currency_conversion_result")
 public class CurrencyConversionResult {
 
+    @Id
+    @Column(name = "transaction_id")
     private String transactionId;
+
+    @Column(name = "base_currency", nullable = false)
     private String baseCurrency;
+
+    @Column(name = "target_currency", nullable = false)
     private String targetCurrency;
+
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "converted_amount", nullable = false)
     private BigDecimal convertedAmount;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 
-    @Id
-    @Column(name = "transaction_id")
     public String getTransactionId() {
         return transactionId;
     }
@@ -33,7 +44,6 @@ public class CurrencyConversionResult {
         this.baseCurrency = baseCurrency;
     }
 
-    @Column(name = "base_currency")
     public String getBaseCurrency() {
         return baseCurrency;
     }
@@ -42,7 +52,6 @@ public class CurrencyConversionResult {
         this.targetCurrency = targetCurrency;
     }
 
-    @Column(name = "target_currency")
     public String getTargetCurrency() {
         return targetCurrency;
     }
@@ -51,12 +60,10 @@ public class CurrencyConversionResult {
         this.amount = amount;
     }
 
-    @Column(name = "amount")
     public BigDecimal getAmount() {
         return amount;
     }
 
-    @Column(name = "converted_amount")
     public BigDecimal getConvertedAmount() {
         return convertedAmount;
     }
@@ -65,13 +72,19 @@ public class CurrencyConversionResult {
         this.convertedAmount = convertedAmount;
     }
 
-    @Column(name = "created_at")
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 
 

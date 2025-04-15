@@ -2,6 +2,7 @@ package com.tamplan.sample.foreignexchange.infra.spring.exception;
 
 import com.tamplan.sample.foreignexchange.domain.ErrorCode;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,11 @@ public abstract class ApplicationException extends RuntimeException{
 
     protected ApplicationException(ErrorCode errorCode, String message) {
         initException(errorCode.getCode());
-        setContextVar("message", message);
+        setContextVar("user_message", message);
+    }
+
+    protected ApplicationException(ErrorCode errorCode) {
+        initException(errorCode.getCode());
     }
 
     private void initException(final String code) {
@@ -45,6 +50,14 @@ public abstract class ApplicationException extends RuntimeException{
                 .toList());
     }
 
+    protected HttpStatus getHttpStatus() {
+        return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
+    public boolean isUserError() {
+        return HttpStatus.BAD_REQUEST == getHttpStatus();
+    }
+
     public String getExceptionId() {
         return exceptionId;
     }
@@ -55,5 +68,9 @@ public abstract class ApplicationException extends RuntimeException{
 
     protected void setContextVar(String key, Object value) {
         contextVars.put(key, value);
+    }
+
+    public String getUserMessage() {
+        return contextVars.getOrDefault("user_message", "").toString();
     }
 }
