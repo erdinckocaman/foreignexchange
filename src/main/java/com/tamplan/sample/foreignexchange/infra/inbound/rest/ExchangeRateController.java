@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,6 +42,12 @@ public class ExchangeRateController {
         logger.info("Currency conversion request: [{}]", request);
         return CurrencyConversionResponse.of(
                 exchangeRateService.convertAmount(request.amount(), request.baseCurrency(), request.targetCurrency()));
+    }
+
+    @PostMapping(value = "/bulk-currency-conversion", consumes = "text/csv", produces = "application/json")
+    public List<CurrencyConversionResponse> bulkConvertAmount(InputStream inputStream) {
+        logger.info("Streaming bulk currency conversion requested");
+        return exchangeRateService.convertAmounts(inputStream);
     }
 
     @GetMapping("/currency-conversion-history")

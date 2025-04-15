@@ -5,16 +5,30 @@ import com.tamplan.sample.foreignexchange.domain.exception.InvalidAmountExceptio
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidCurrencyException;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidUserInputException;
 import com.tamplan.sample.foreignexchange.domain.repository.CurrencyConversionRepository;
+import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConversionResponse;
+import com.tamplan.sample.foreignexchange.infra.spring.exception.UndefinedException;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class ExchangeRatesService {
 
+    private static final Logger logger  = LoggerFactory.getLogger(ExchangeRatesService.class);
+
+    @Value("${app.bulk-currency-conversion.max}")
+    private int maxBulkCurrencyConversions;
     private final ExchangeRatesGateway exchangeRatesGateway;
     private final CurrencyConversionRepository currencyConversionRepository;
 
@@ -57,6 +71,45 @@ public class ExchangeRatesService {
         }
         return Currency.findByCode(currencyCode)
                 .orElseThrow(() -> new InvalidCurrencyException("invalid currency: [%s]".formatted(currencyCode)));
+    }
+
+    /**
+     * Converts a list of amounts from base currency to target currency.
+     *
+     * @param inputStream the input stream containing the amounts to convert
+     * @return a list of conversion results
+     */
+
+    public List<CurrencyConversionResponse> convertAmounts(InputStream inputStream) {
+        List<CurrencyConversionResponse> responses = new LinkedList<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (maxBulkCurrencyConversions <= responses.size()) {
+                    throw new InvalidUserInputException(
+                            "Maximum bulk currency conversions exceeded, max: [%d]".formatted(maxBulkCurrencyConversions));
+                }
+
+                String[] values = line.split(",");
+                if (values.length<3) {
+                    logger.info("Invalid line: [{}], expected 3 values", line);
+                    continue;
+                }
+
+                BigDecimal amount = new BigDecimal(values[0].trim());
+                String baseCurrency = values[1].trim();
+                String targetCurrency = values[2].trim();
+
+                var conversionResult = convertAmount(amount, baseCurrency, targetCurrency);
+
+                responses.add(CurrencyConversionResponse.of(conversionResult));
+            }
+        } catch (IOException e) {
+            throw new UndefinedException(e);
+        }
+
+        return responses;
     }
 
     /**
