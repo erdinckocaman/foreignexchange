@@ -1,6 +1,6 @@
 package com.tamplan.sample.foreignexchange.infra.spring.exception;
 
-import com.tamplan.sample.foreignexchange.domain.ErrorCode;
+import com.tamplan.sample.foreignexchange.domain.common.ErrorCode;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
 import org.springframework.http.HttpStatus;
 

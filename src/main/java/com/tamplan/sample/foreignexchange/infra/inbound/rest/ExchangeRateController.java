@@ -1,6 +1,6 @@
 package com.tamplan.sample.foreignexchange.infra.inbound.rest;
 
-import com.tamplan.sample.foreignexchange.domain.ExchangeRatesService;
+import com.tamplan.sample.foreignexchange.domain.service.ExchangeRatesService;
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConversionRequest;
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConversionResponse;
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.ExchangeRateResponse;

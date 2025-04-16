@@ -1,4 +1,6 @@
-package com.tamplan.sample.foreignexchange.domain;
+package com.tamplan.sample.foreignexchange.domain.gateway;
+
+import com.tamplan.sample.foreignexchange.domain.common.Currency;
 
 import java.math.BigDecimal;
 

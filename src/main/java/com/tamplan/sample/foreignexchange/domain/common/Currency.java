@@ -1,4 +1,4 @@
-package com.tamplan.sample.foreignexchange.domain;
+package com.tamplan.sample.foreignexchange.domain.common;
 
 import java.util.Optional;
 

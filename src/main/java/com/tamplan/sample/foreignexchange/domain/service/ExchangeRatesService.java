@@ -1,9 +1,11 @@
-package com.tamplan.sample.foreignexchange.domain;
+package com.tamplan.sample.foreignexchange.domain.service;
 
+import com.tamplan.sample.foreignexchange.domain.common.Currency;
 import com.tamplan.sample.foreignexchange.domain.entity.CurrencyConversionResult;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidAmountException;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidCurrencyException;
 import com.tamplan.sample.foreignexchange.domain.exception.InvalidUserInputException;
+import com.tamplan.sample.foreignexchange.domain.gateway.ExchangeRatesGateway;
 import com.tamplan.sample.foreignexchange.domain.repository.CurrencyConversionRepository;
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConversionResponse;
 import com.tamplan.sample.foreignexchange.infra.spring.exception.UndefinedException;

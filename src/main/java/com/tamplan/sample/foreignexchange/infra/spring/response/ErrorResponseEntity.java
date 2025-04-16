@@ -8,10 +8,10 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
-public class ForeignExchangeResponseEntity extends ResponseEntity<ForeignExchangeResponse> {
+public class ErrorResponseEntity extends ResponseEntity<ErrorResponse> {
 
-    public ForeignExchangeResponseEntity(ApplicationException applicationException, HttpStatusCode status) {
-        super(ForeignExchangeResponse.of(applicationException), buildErrorHeader(applicationException.getExceptionId()), status);
+    public ErrorResponseEntity(ApplicationException applicationException, HttpStatusCode status) {
+        super(ErrorResponse.of(applicationException), buildErrorHeader(applicationException.getExceptionId()), status);
     }
 
     private static MultiValueMap<String, String> buildErrorHeader(String exceptionId) {
