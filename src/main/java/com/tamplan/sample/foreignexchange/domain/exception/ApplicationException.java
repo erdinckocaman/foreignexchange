@@ -1,8 +1,7 @@
-package com.tamplan.sample.foreignexchange.infra.spring.exception;
+package com.tamplan.sample.foreignexchange.domain.exception;
 
 import com.tamplan.sample.foreignexchange.domain.common.ErrorCode;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
-import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,12 +49,12 @@ public abstract class ApplicationException extends RuntimeException{
                 .toList());
     }
 
-    protected HttpStatus getHttpStatus() {
-        return HttpStatus.INTERNAL_SERVER_ERROR;
+    public int getHttpStatus() {
+        return 500;
     }
 
     public boolean isUserError() {
-        return HttpStatus.BAD_REQUEST == getHttpStatus();
+        return 400 == getHttpStatus();
     }
 
     public String getExceptionId() {

@@ -1,9 +1,8 @@
 package com.tamplan.sample.foreignexchange.domain.exception;
 
 import com.tamplan.sample.foreignexchange.domain.common.ErrorCode;
-import com.tamplan.sample.foreignexchange.infra.spring.exception.ApplicationException;
 
-public class InvalidCurrencyException extends ApplicationException {
+public class InvalidCurrencyException extends InvalidUserInputException {
 
     public InvalidCurrencyException(String message) {
         super(ErrorCode.INVALID_CURRENCY_CODE, message);

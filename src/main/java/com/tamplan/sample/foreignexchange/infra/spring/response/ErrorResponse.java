@@ -1,6 +1,6 @@
 package com.tamplan.sample.foreignexchange.infra.spring.response;
 
-import com.tamplan.sample.foreignexchange.infra.spring.exception.ApplicationException;
+import com.tamplan.sample.foreignexchange.domain.exception.ApplicationException;
 
 public record ErrorResponse(String exceptionId, String code, String message) {
 

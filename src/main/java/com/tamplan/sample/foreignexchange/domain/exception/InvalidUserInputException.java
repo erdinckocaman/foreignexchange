@@ -1,8 +1,6 @@
 package com.tamplan.sample.foreignexchange.domain.exception;
 
 import com.tamplan.sample.foreignexchange.domain.common.ErrorCode;
-import com.tamplan.sample.foreignexchange.infra.spring.exception.ApplicationException;
-import org.springframework.http.HttpStatus;
 
 public class InvalidUserInputException extends ApplicationException {
 
@@ -10,8 +8,12 @@ public class InvalidUserInputException extends ApplicationException {
         super(ErrorCode.INVALID_USER_INPUT, message);
     }
 
+    public InvalidUserInputException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
+
     @Override
-    protected HttpStatus getHttpStatus() {
-        return HttpStatus.BAD_REQUEST;
+    public int getHttpStatus() {
+        return 400;
     }
 }

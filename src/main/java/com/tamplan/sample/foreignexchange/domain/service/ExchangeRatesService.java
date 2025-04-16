@@ -8,7 +8,7 @@ import com.tamplan.sample.foreignexchange.domain.exception.InvalidUserInputExcep
 import com.tamplan.sample.foreignexchange.domain.gateway.ExchangeRatesGateway;
 import com.tamplan.sample.foreignexchange.domain.repository.CurrencyConversionRepository;
 import com.tamplan.sample.foreignexchange.infra.inbound.rest.model.CurrencyConversionResponse;
-import com.tamplan.sample.foreignexchange.infra.spring.exception.UndefinedException;
+import com.tamplan.sample.foreignexchange.domain.exception.UndefinedException;
 import com.tamplan.sample.foreignexchange.util.RandomIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

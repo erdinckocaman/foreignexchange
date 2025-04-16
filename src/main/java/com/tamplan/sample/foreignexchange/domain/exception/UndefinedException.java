@@ -1,4 +1,4 @@
-package com.tamplan.sample.foreignexchange.infra.spring.exception;
+package com.tamplan.sample.foreignexchange.domain.exception;
 
 public final class UndefinedException extends ApplicationException{
 
