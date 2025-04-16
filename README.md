@@ -23,7 +23,7 @@ This is a Spring Boot microservice application that calculates exchange rates an
 
 ## Technical Architecture
 
-- Developed using **Domain-Driven Design (DDD)** principles
+- Developed using **Onion Architecture** principles
 - REST APIs implemented with **Spring Boot** web framework
 - Database operations abstracted using Repository pattern
 - Uses CurrencyLayer as an external service provider
@@ -47,16 +47,16 @@ This is a Spring Boot microservice application that calculates exchange rates an
 
 ```bash
 # Clone the project
-git clone https://github.com/username/foreignexchange.git
+git clone https://github.com/erdinckocaman/foreignexchange.git
 
 # Navigate to project directory
 cd foreignexchange
 
 # Build with Maven
-mvn clean install
+./mvnw clean package
 
 # Run the application
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 ## Usage Examples
