@@ -135,7 +135,7 @@ public class ExchangeRatesService {
         conversionResult.setBaseCurrency(baseCurrency.name());
         conversionResult.setTargetCurrency(targetCurrency.name());
         conversionResult.setAmount(amount);
-        conversionResult.setConvertedAmount(exchangeRatesGateway.convertAmount(amount, baseCurrency, targetCurrency));
+        conversionResult.setConvertedAmount(amount.multiply(exchangeRatesGateway.calculateExchangeRate(baseCurrency, targetCurrency)));
         currencyConversionRepository.saveCurrencyConversionResult(conversionResult);
 
         return currencyConversionRepository.findByTransactionId(txnId).orElseThrow();

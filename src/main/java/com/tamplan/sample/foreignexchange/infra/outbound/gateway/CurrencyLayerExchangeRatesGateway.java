@@ -42,11 +42,6 @@ public class CurrencyLayerExchangeRatesGateway implements ExchangeRatesGateway {
         return getRate(baseCurrency, targetCurrency);
     }
 
-    @Override
-    public BigDecimal convertAmount(BigDecimal amount, Currency baseCurrency, Currency targetCurrency) {
-        return getRate(baseCurrency, targetCurrency).multiply(amount);
-    }
-
     private BigDecimal getRate(Currency baseCurrency, Currency targetCurrency) {
         waitToAvoidRateLimit();
 
